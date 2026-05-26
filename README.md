@@ -4,7 +4,7 @@ Carte personnalisée Home Assistant pour les centrales **Somfy Protexial / Prote
 
 Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et l'état des capteurs fournis par l'intégration [somfy-protexial](https://github.com/the8tre/somfy-protexial).
 
-![Aperçu thème sombre](screenshot_dark.png)
+![Aperçu thème sombre](doc/images/dark_example.jpg)
 
 ---
 
