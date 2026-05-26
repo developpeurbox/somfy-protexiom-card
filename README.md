@@ -2,7 +2,7 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 [![Community Forum][forum-shield]][forum]
 
-# somfy-alarm-card
+# 🛡️ somfy-alarm-card
 
 Carte personnalisée Home Assistant pour les centrales **Somfy Protexial / Protexiom / Protexial IO**.
 
@@ -12,7 +12,7 @@ Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et
 
 ---
 
-## Prérequis
+## ✅ Prérequis
 
 - Home Assistant avec l'intégration [somfy-protexial](https://github.com/the8tre/somfy-protexial) installée et configurée
 - Les entités suivantes doivent exister dans HA :
@@ -27,13 +27,13 @@ Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et
 
 ---
 
-## 📥 **Installation**
+## 📥 Installation
 
-### **Via HACS (recommandé)** 🔄
+### Via HACS (recommandé) 🔄
 1. Ajoutez ce dépôt à HACS :
    **Dépôts personnalisés** → **Ajouter un dépôt personnalisé** → `https://github.com/developpeurbox/footao-game-card/`
 
-### **Ou manuellement** 🛠️
+### Ou manuellement 🛠️
 
 1. Télécharger le fichier `somfy-alarm-card.js`
 2. Le copier dans le répertoire `/config/www/` de Home Assistant
@@ -44,8 +44,7 @@ Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et
 
 ---
 
-
-## 🎯 **Utilisation**
+## 🎯 Utilisation
 
 Ajouter la carte en YAML dans votre tableau de bord :
 
@@ -62,9 +61,9 @@ Toutes les options correspondent aux noms d'entités par défaut de l'intégrati
 
 ---
 
-## Fonctionnalités
+## ✨ Fonctionnalités
 
-### Section Contrôle
+### 🔐 Section Contrôle
 - Affiche l'état courant de l'alarme avec couleur dynamique selon l'état
 - Indique depuis combien de temps l'alarme est dans cet état (ex. *depuis 1h30*)
 - Glow statique sur l'icône quand l'alarme est armée ou déclenchée
@@ -77,17 +76,17 @@ Toutes les options correspondent aux noms d'entités par défaut de l'intégrati
 | Présent | `arm_home` |
 | Nuit | `arm_night` |
 
-### Section Capteurs
+### 📡 Section Capteurs
 - Affiche les 4 capteurs de statut avec indicateur coloré
 - 🟢 **OK** — état nominal
 - 🔴 **Valeur KO** — alerte (affichée telle quelle : *Pas de réseau*, *Problème*, *Vérifier la liste des éléments*…)
 
-### Thème
+### 🎨 Thème
 - S'adapte automatiquement au thème HA (clair / sombre) via les variables CSS natives de Home Assistant
 
 ---
 
-## États de l'alarme
+## 🚦 États de l'alarme
 
 | État HA | Libellé affiché | Couleur |
 |---------|----------------|---------|
@@ -102,16 +101,15 @@ Toutes les options correspondent aux noms d'entités par défaut de l'intégrati
 
 ---
 
-## Intégration associée
+## 🔗 Intégration associée
 
 Cette carte est conçue pour fonctionner avec :
 
-👉 [the8tre/somfy-protexial](https://github.com/the8tre/somfy-protexial) — Intégration Home Assistant pour centrale SOMFY Protexial / Protexiom / Protex
-ial IO
+👉 [the8tre/somfy-protexial](https://github.com/the8tre/somfy-protexial) — Intégration Home Assistant pour centrale SOMFY Protexial / Protexiom / Protexial IO
 
 ---
 
-## Licence
+## 📄 Licence
 
 MIT
 
@@ -123,12 +121,5 @@ MIT
 [forum]: https://community.home-assistant.io/
 
 [commits]: https://github.com/developpeurbox/somfy-protexiom-card/commits/main
-[hacs]: https://github.com/hacs/integration
 [hacsbadge]: https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge
 [exampleimg]: example.png
-[forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
-[forum]: https://community.home-assistant.io/
-[releases-shield]: https://img.shields.io/github/v/release/developpeurbox/somfy-protexiom-card?style=for-the-badge
-[releases]: https://github.com/developpeurbox/somfy-protexiom-card/releases
-
-
