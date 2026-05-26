@@ -1,3 +1,9 @@
+/* ========================================================
+   Somfy Protexiom Card  — v0.0.1
+   ======================================================== */
+
+const CARD_VERSION = "v0.0.15";
+
 class SomfyAlarmCard extends HTMLElement {
   constructor() {
     super();
@@ -5,6 +11,8 @@ class SomfyAlarmCard extends HTMLElement {
   }
 
   setConfig(config) {
+    console.info(`%c SOMFY-PROTEXIOM-CARD %c ${CARD_VERSION} `, "color:#c8a96e;background:#1e1e2e;font-weight:700;padding:2px 4px;border-radius:4px 0 0 4px", "color:#1e1e2e;background:#c8a96e;font-weight:700;padding:2px 4px;border-radius:0 4px 4px 0");
+
     this.config = {
       alarm_entity: config.alarm_entity || "alarm_control_panel.alarme",
       battery_entity: config.battery_entity || "binary_sensor.batterie",
