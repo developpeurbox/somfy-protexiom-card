@@ -1,3 +1,7 @@
+[![GitHub Release][releases-shield]][releases]
+[![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
+[![Community Forum][forum-shield]][forum]
+
 # somfy-alarm-card
 
 Carte personnalisée Home Assistant pour les centrales **Somfy Protexial / Protexiom / Protexial IO**.
@@ -103,3 +107,21 @@ ial IO
 ## Licence
 
 MIT
+
+[releases-shield]: https://img.shields.io/github/v/release/developpeurbox/somfy-protexiom-card?style=for-the-badge
+[releases]: https://github.com/developpeurbox/somfy-protexiom-card/releases
+[hacs-badge]: https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge
+[hacs]: https://github.com/hacs/integration
+[forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
+[forum]: https://community.home-assistant.io/
+
+[commits]: https://github.com/developpeurbox/somfy-protexiom-card/commits/main
+[hacs]: https://github.com/hacs/integration
+[hacsbadge]: https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge
+[exampleimg]: example.png
+[forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
+[forum]: https://community.home-assistant.io/
+[releases-shield]: https://img.shields.io/github/v/release/developpeurbox/somfy-protexiom-card?style=for-the-badge
+[releases]: https://github.com/developpeurbox/somfy-protexiom-card/releases
+
+
