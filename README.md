@@ -27,7 +27,13 @@ Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et
 
 ---
 
-## Installation
+## 📥 **Installation**
+
+### **Via HACS (recommandé)** 🔄
+1. Ajoutez ce dépôt à HACS :
+   **Dépôts personnalisés** → **Ajouter un dépôt personnalisé** → `https://github.com/developpeurbox/footao-game-card/`
+
+### **Ou manuellement** 🛠️
 
 1. Télécharger le fichier `somfy-alarm-card.js`
 2. Le copier dans le répertoire `/config/www/` de Home Assistant
@@ -38,7 +44,8 @@ Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et
 
 ---
 
-## Configuration
+
+## 🎯 **Utilisation**
 
 Ajouter la carte en YAML dans votre tableau de bord :
 
