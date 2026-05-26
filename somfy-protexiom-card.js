@@ -298,7 +298,7 @@ customElements.define("somfy-alarm-card", SomfyAlarmCard);
 
 window.customCards = window.customCards || [];
 window.customCards.push({
-  type: "somfy-alarm-card",
-  name: "Somfy Alarm Card",
+  type: "somfy-protexiom-card.js",
+  name: "Somfy Protexiom Card",
   description: "Carte personnalisée pour alarme Somfy Protexiom",
 });
