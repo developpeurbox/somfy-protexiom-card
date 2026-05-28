@@ -17,13 +17,18 @@ Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et
 - Home Assistant avec l'intégration [somfy-protexial](https://github.com/the8tre/somfy-protexial) installée et configurée
 - Les entités suivantes doivent exister dans HA :
 
-| Entité | Description |
-|--------|-------------|
+| Entité par défaut | Description |
+|---|---|
 | `alarm_control_panel.alarme` | Centrale d'alarme |
-| `binary_sensor.batterie` | État des batteries |
-| `binary_sensor.boitier` | État du boîtier |
-| `binary_sensor.communication_radio` | Communication Centrale ↔ Capteurs |
-| `binary_sensor.communication_gsm` | Communication GSM |
+| `binary_sensor.somfy_protexial_batterie` | État des batteries |
+| `binary_sensor.somfy_protexial_camera` | Caméra |
+| `binary_sensor.somfy_protexial_centrale` | Centrale |
+| `binary_sensor.somfy_protexial_comm_centrale_capteurs` | Communication Centrale ↔ Capteurs |
+| `binary_sensor.somfy_protexial_communication_gsm` | Communication GSM |
+| `binary_sensor.somfy_protexial_mouvement` | Détection de mouvement |
+| `sensor.somfy_protexial_operateur_gsm` | Opérateur GSM |
+| `binary_sensor.somfy_protexial_portes_ou_fenetres` | Portes / Fenêtres |
+| `sensor.somfy_protexial_signal_gsm_5` | Signal GSM |
 
 ---
 
@@ -31,14 +36,14 @@ Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et
 
 ### Via HACS (recommandé) 🔄
 1. Ajoutez ce dépôt à HACS :
-   **Dépôts personnalisés** → **Ajouter un dépôt personnalisé** → `https://github.com/developpeurbox/footao-game-card/`
+   **Dépôts personnalisés** → **Ajouter un dépôt personnalisé** → `https://github.com/developpeurbox/somfy-protexial-card/`
 
 ### Ou manuellement 🛠️
 
-1. Télécharger le fichier `somfy-alarm-card.js`
+1. Télécharger le fichier `somfy-protexial-card.js`
 2. Le copier dans le répertoire `/config/www/` de Home Assistant
 3. Dans HA : **Paramètres → Tableaux de bord → Ressources → Ajouter une ressource**
-   - URL : `/local/somfy-alarm-card.js`
+   - URL : `/local/somfy-protexial-card.js`
    - Type : **Module JavaScript**
 4. Vider le cache du navigateur ou de l'app Android (**Paramètres → Compagnon → Vider le cache**)
 
@@ -46,40 +51,65 @@ Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et
 
 ## 🎯 Utilisation
 
-Ajouter la carte en YAML dans votre tableau de bord :
+### Configuration minimale (YAML)
 
 ```yaml
-type: custom:somfy-alarm-card
+type: custom:somfy-protexial-card
 alarm_entity: alarm_control_panel.alarme
-battery_entity: binary_sensor.batterie
-boitier_entity: binary_sensor.boitier
-radio_entity: binary_sensor.communication_radio
-gsm_entity: binary_sensor.communication_gsm
 ```
 
-Toutes les options correspondent aux noms d'entités par défaut de l'intégration somfy-protexial. Si vos entités ont des noms différents, adaptez les valeurs en conséquence.
+### Configuration complète (YAML)
+
+```yaml
+type: custom:somfy-protexial-card
+alarm_entity: alarm_control_panel.alarme
+title: "Somfy Protexial — Contrôle"
+sensors:
+  - capteur1
+  - capteur2
+  - capteur3
+  - capteur4
+  - capteur5
+  - capteur6
+  - capteur7
+  - capteur8
+  - capteur9
+entities:
+  capteur1: binary_sensor.somfy_protexial_batterie
+  capteur7: sensor.somfy_protexial_operateur_gsm
+labels:
+  capteur1: "Batterie"
+  capteur7: "Opérateur"
+```
+
+La carte dispose d'un **éditeur graphique intégré** : toutes les options sont configurables directement depuis l'interface HA sans éditer le YAML.
+
+- La clé `sensors` liste les capteurs à afficher (tous activés par défaut).
+- `entities` permet de remplacer une entité par défaut pour un capteur donné.
+- `labels` permet de renommer l'étiquette affichée pour un capteur donné.
 
 ---
 
 ## ✨ Fonctionnalités
 
-### 🔐 Section Contrôle
+### 🔐 Section Alarme
 - Affiche l'état courant de l'alarme avec couleur dynamique selon l'état
 - Indique depuis combien de temps l'alarme est dans cet état (ex. *depuis 1h30*)
-- Glow statique sur l'icône quand l'alarme est armée ou déclenchée
-- 4 boutons d'action :
+- Glow sur l'icône quand l'alarme est armée ou déclenchée
+- 2 boutons d'action :
 
-| Bouton | Action |
-|--------|--------|
-| Désarmer | `disarm` |
-| Absent | `arm_away` |
-| Présent | `arm_home` |
-| Nuit | `arm_night` |
+| Bouton | Action HA |
+|--------|-----------|
+| Désarmer | `alarm_disarm` |
+| Absent | `alarm_arm_away` |
 
 ### 📡 Section Capteurs
-- Affiche les 4 capteurs de statut avec indicateur coloré
-- 🟢 **OK** — état nominal
-- 🔴 **Valeur KO** — alerte (affichée telle quelle : *Pas de réseau*, *Problème*, *Vérifier la liste des éléments*…)
+- Affiche jusqu'à 9 capteurs de statut avec indicateur coloré
+- Capteurs de type **binary** (`OK` / autre valeur) :
+  - 🟢 **OK** — état nominal
+  - 🔴 **Valeur KO** — alerte (valeur brute affichée)
+- Capteurs de type **info** (valeur texte) :
+  - Affichage de la valeur brute de l'entité avec point coloré (couleur principale du thème)
 
 ### 🎨 Thème
 - S'adapte automatiquement au thème HA (clair / sombre) via les variables CSS natives de Home Assistant
@@ -119,7 +149,3 @@ MIT
 [hacs]: https://github.com/hacs/integration
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
 [forum]: https://community.home-assistant.io/
-
-[commits]: https://github.com/developpeurbox/somfy-protexial-card/commits/main
-[hacsbadge]: https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge
-[exampleimg]: example.png
