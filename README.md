@@ -113,13 +113,13 @@ Cette carte est conçue pour fonctionner avec :
 
 MIT
 
-[releases-shield]: https://img.shields.io/github/v/release/developpeurbox/somfy-protexiom-card?style=for-the-badge
-[releases]: https://github.com/developpeurbox/somfy-protexiom-card/releases
+[releases-shield]: https://img.shields.io/github/v/release/developpeurbox/somfy-protexial-card?style=for-the-badge
+[releases]: https://github.com/developpeurbox/somfy-protexial-card/releases
 [hacs-badge]: https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge
 [hacs]: https://github.com/hacs/integration
 [forum-shield]: https://img.shields.io/badge/community-forum-brightgreen.svg?style=for-the-badge
 [forum]: https://community.home-assistant.io/
 
-[commits]: https://github.com/developpeurbox/somfy-protexiom-card/commits/main
+[commits]: https://github.com/developpeurbox/somfy-protexial-card/commits/main
 [hacsbadge]: https://img.shields.io/badge/HACS-Default-orange.svg?style=for-the-badge
 [exampleimg]: example.png
