@@ -2,7 +2,7 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Custom-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 [![Community Forum][forum-shield]][forum]
 
-# 🛡️ somfy-alarm-card
+# 🛡️ somfy-protexial-card
 
 Carte personnalisée Home Assistant pour les centrales **Somfy Protexial / Protexiom / Protexial IO**.
 
