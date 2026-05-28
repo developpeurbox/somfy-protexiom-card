@@ -137,11 +137,6 @@ Cette carte est conçue pour fonctionner avec :
 
 👉 [the8tre/somfy-protexial](https://github.com/the8tre/somfy-protexial) — Intégration Home Assistant pour centrale SOMFY Protexial / Protexiom / Protexial IO
 
----
-
-## 📄 Licence
-
-MIT
 
 [releases-shield]: https://img.shields.io/github/v/release/developpeurbox/somfy-protexial-card?style=for-the-badge
 [releases]: https://github.com/developpeurbox/somfy-protexial-card/releases
