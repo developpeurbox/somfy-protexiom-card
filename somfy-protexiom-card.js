@@ -1,5 +1,5 @@
 /* ========================================================
-   Somfy Protexial Card  
+   Somfy Protexial Card
    ======================================================== */
 
 const CARD_VERSION = "v0.0.2";
@@ -251,7 +251,7 @@ class SomfyProtexialCard extends HTMLElement {
     const isUnavail = state === "unavailable";
     let statusLabel, statusColor, dotColor;
     if (sensor.type === "binary") {
-      const okStates = ["non détecté","Non détectée", "fermées", "Fermées", "ok", "OK", "Ok" ];
+      const okStates = ["non détecté","Non détecté", "fermées", "Fermées", "ok", "OK", "Ok" ];
       const isOk = okStates.includes(String(state));
       statusLabel = isUnavail ? "Indisponible" : state;
       statusColor = isUnavail ? "var(--disabled-color)" : isOk ? "#4ade80" : "#ef4444";
@@ -374,19 +374,22 @@ class SomfyProtexialCard extends HTMLElement {
     `;
 
     // Boutons
-    this.shadowRoot.querySelectorAll(".btn[data-action]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        
-      this._hass.callService(
+this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const action = btn.dataset.action;
+
+    this._hass.callService(
       "alarm_control_panel",
-        action === "disarm" ? "alarm_disarm" :
-        action === "arm_home" ? "alarm_arm_home" : "alarm_arm_away",
-        {},
-        { entity_id: this.config.alarm_entity }
-      );
-         
-      });
-    });
+      action === "disarm"
+        ? "alarm_disarm"
+        : action === "arm_home"
+          ? "alarm_arm_home"
+          : "alarm_arm_away",
+      {},
+      { entity_id: this.config.alarm_entity }
+    );
+  });
+});
   }
 
   // ── Mise à jour légère (sans reconstruire le DOM) ────
