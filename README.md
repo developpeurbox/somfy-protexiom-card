@@ -6,7 +6,7 @@
 
 Carte personnalisée Home Assistant pour les centrales **Somfy Protexial / Protexiom / Protexial IO**.
 
-Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et l'état des capteurs fournis par l'intégration [somfy-protexial](https://github.com/the8tre/somfy-protexial).
+Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et l'état des capteurs fournis par l'intégration [somfy-protexial](https://github.com/the8tre/somfy-protexial) et son [fork](https://github.com/AuroreVgn/somfy-protexial) mis à jour avec les infos GSM .
 
 ![Aperçu thème sombre](doc/images/dark_example.jpg)
 
@@ -14,8 +14,13 @@ Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et
 
 ## ✅ Prérequis
 
-- Home Assistant avec l'intégration [somfy-protexial](https://github.com/the8tre/somfy-protexial) installée et configurée
-- Les entités suivantes doivent exister dans HA :
+- Home Assistant avec l'intégration [somfy-protexial](https://github.com/the8tre/somfy-protexial) installée et configurée (sans les infos liées au GSM)
+
+OU
+
+- Home Assistant avec le [fork](https://github.com/AuroreVgn/somfy-protexial) mis à jour installé et configuréee (avec les infos liées au GSM)
+
+Les entités suivantes doivent exister dans HA :
 
 | Entité par défaut | Description |
 |---|---|
@@ -26,9 +31,9 @@ Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et
 | `binary_sensor.somfy_protexial_comm_centrale_capteurs` | Communication Centrale ↔ Capteurs |
 | `binary_sensor.somfy_protexial_communication_gsm` | Communication GSM |
 | `binary_sensor.somfy_protexial_mouvement` | Détection de mouvement |
-| `sensor.somfy_protexial_operateur_gsm` | Opérateur GSM |
+| `sensor.somfy_protexial_operateur_gsm` | Opérateur GSM - [fork](https://github.com/AuroreVgn/somfy-protexial) uniquement |
 | `binary_sensor.somfy_protexial_portes_ou_fenetres` | Portes / Fenêtres |
-| `sensor.somfy_protexial_signal_gsm_5` | Signal GSM |
+| `sensor.somfy_protexial_signal_gsm_5` | Signal GSM - [fork](https://github.com/AuroreVgn/somfy-protexial) uniquement|
 
 ---
 
@@ -96,12 +101,13 @@ La carte dispose d'un **éditeur graphique intégré** : toutes les options sont
 - Affiche l'état courant de l'alarme avec couleur dynamique selon l'état
 - Indique depuis combien de temps l'alarme est dans cet état (ex. *depuis 1h30*)
 - Glow sur l'icône quand l'alarme est armée ou déclenchée
-- 2 boutons d'action :
+- 3 boutons d'action :
 
 | Bouton | Action HA |
 |--------|-----------|
 | Désarmer | `alarm_disarm` |
 | Absent | `alarm_arm_away` |
+| Présent | `alarm_arm_home` |
 
 ### 📡 Section Capteurs
 - Affiche jusqu'à 9 capteurs de statut avec indicateur coloré
@@ -135,7 +141,11 @@ La carte dispose d'un **éditeur graphique intégré** : toutes les options sont
 
 Cette carte est conçue pour fonctionner avec :
 
+SANS les informations relatives au GSM : 
 👉 [the8tre/somfy-protexial](https://github.com/the8tre/somfy-protexial) — Intégration Home Assistant pour centrale SOMFY Protexial / Protexiom / Protexial IO
+
+AVEC les informations relatives au GSM : 
+👉 [AuroreVgn/somfy-protexial](https://github.com/AuroreVgn/somfy-protexial) — Fork mise à jour de l'intégration Home Assistant pour centrale SOMFY Protexial / Protexiom / Protexial IO
 
 
 [releases-shield]: https://img.shields.io/github/v/release/developpeurbox/somfy-protexial-card?style=for-the-badge
