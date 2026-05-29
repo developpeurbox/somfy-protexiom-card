@@ -461,12 +461,14 @@ this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
           ? "alarm_arm_home"
           : "alarm_arm_away";
 
-    this._hass.callService(
-      "alarm_control_panel",
-      service,
-      code ? { code } : {},
-      { entity_id: this.config.alarm_entity }
-    );
+this._hass.callService(
+  "alarm_control_panel",
+  service,
+  {
+    entity_id: this.config.alarm_entity,
+    ...(code ? { code } : {})
+  }
+);
   });
 });
 }
