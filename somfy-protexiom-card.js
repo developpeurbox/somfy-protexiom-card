@@ -13,7 +13,7 @@ const SENSORS_DEF = [
   { key: "capteur6", defaultEntity: "binary_sensor.somfy_protexial_comm_centrale_capteurs", defaultLabel: "Affiche Capteur 4", defaultText: "Capteurs", type: "binary" },
   { key: "capteur7", defaultEntity: "binary_sensor.somfy_protexial_communication_gsm", defaultLabel: "Affiche Capteur 5", defaultText: "Gsm", type: "binary" },
   { key: "capteur8", defaultEntity: "sensor.somfy_protexial_operateur_gsm", defaultLabel: "Affiche Capteur 7", defaultText: "Opérateur", type: "info" },
-  { key: "capteur9", defaultEntity: "sensor.somfy_protexial_signal_gsm_5", defaultLabel: "Affiche Capteur 9", defaultText: "Signal Gsm", type: "info" },
+  { key: "capteur9", defaultEntity: "sensor.somfy_protexial_signal_gsm_5", defaultLabel: "Affiche Capteur 9", defaultText: "Signal Gsm (/5)", type: "info" },
 ];
 
 // ── Editor ──────────────────────────────────────────────
@@ -251,7 +251,7 @@ class SomfyProtexialCard extends HTMLElement {
     const isUnavail = state === "unavailable";
     let statusLabel, statusColor, dotColor;
     if (sensor.type === "binary") {
-      const okStates = ["on", "open", "open", "detected", "non détecté", "fermées"];
+      const okStates = ["non détecté","Non détectée", "fermées", "Fermées", "ok", "OK", "Ok" ];
       const isOk = okStates.includes(String(state));
       statusLabel = isUnavail ? "Indisponible" : state;
       statusColor = isUnavail ? "var(--disabled-color)" : isOk ? "#4ade80" : "#ef4444";
