@@ -433,42 +433,39 @@ const isOk = okStates.includes(normalizedState);
       </div>
     `;
 
-    // Boutons
-this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
-  btn.addEventListener("click", async () => {
-    const action = btn.dataset.action;
+// Boutons 
+this.shadowRoot.addEventListener("click", async (ev) => {
+  const btn = ev.target.closest(".btn");
+  if (!btn) return;
 
-    const entity = this._getState(this.config.alarm_entity);
+  ev.preventDefault();
+  ev.stopPropagation();
 
-    // ── Détection si un code est requis ──
-    const codeRequired =
-      entity?.attributes?.code_format ||
-      entity?.attributes?.code_arm_required === true;
+  const action = btn.dataset.action;
+  const entity = this._getState(this.config.alarm_entity);
 
-    // code éventuellement défini dans la config
-    let code = this.config.alarm_code;
+  // ── Détection si un code est requis ──
+  const codeRequired =
+    entity?.attributes?.code_format ||
+    entity?.attributes?.code_arm_required === true;
 
-    // ── Si code requis et absent → demande utilisateur ──
-    if (codeRequired && !code) {
-      code = await this._askCode();
-      if (!code) return; // annulation utilisateur
-    }
+  let code = this.config.alarm_code;
 
-    const service =
-      action === "disarm"
-        ? "alarm_disarm"
-        : action === "arm_home"
-          ? "alarm_arm_home"
-          : "alarm_arm_away";
+  if (codeRequired && !code) {
+    code = await this._askCode();
+    if (!code) return;
+  }
 
-this._hass.callService(
-  "alarm_control_panel",
-  service,
-  {
+  const service =
+    action === "disarm"
+      ? "alarm_disarm"
+      : action === "arm_home"
+        ? "alarm_arm_home"
+        : "alarm_arm_away";
+
+  this._hass.callService("alarm_control_panel", service, {
     entity_id: this.config.alarm_entity,
     ...(code ? { code } : {})
-  }
-);
   });
 });
 }
