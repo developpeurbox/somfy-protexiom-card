@@ -435,7 +435,11 @@ const isOk = okStates.includes(normalizedState);
 
 // Boutons 
 this.shadowRoot.addEventListener("click", async (ev) => {
-  const btn = ev.target.closest(".btn");
+  const path = ev.composedPath ? ev.composedPath() : [];
+  const btn = path.find(el =>
+    el?.classList?.contains?.("btn")
+  );
+
   if (!btn) return;
 
   ev.preventDefault();
@@ -444,7 +448,11 @@ this.shadowRoot.addEventListener("click", async (ev) => {
   const action = btn.dataset.action;
   const entity = this._getState(this.config.alarm_entity);
 
-  // ── Détection si un code est requis ──
+  if (!this._hass) {
+    console.error("HA not ready (_hass missing)");
+    return;
+  }
+
   const codeRequired =
     entity?.attributes?.code_format ||
     entity?.attributes?.code_arm_required === true;
@@ -463,10 +471,14 @@ this.shadowRoot.addEventListener("click", async (ev) => {
         ? "alarm_arm_home"
         : "alarm_arm_away";
 
-  this._hass.callService("alarm_control_panel", service, {
-    entity_id: this.config.alarm_entity,
-    ...(code ? { code } : {})
-  });
+  try {
+    await this._hass.callService("alarm_control_panel", service, {
+      entity_id: this.config.alarm_entity,
+      ...(code ? { code } : {})
+    });
+  } catch (e) {
+    console.error("Service call failed:", e);
+  }
 });
 }
      
