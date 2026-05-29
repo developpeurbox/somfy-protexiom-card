@@ -59,6 +59,48 @@ class SomfyProtexialCardEditor extends HTMLElement {
     ];
   }
 
+_askCode() {
+    return new Promise(resolve => {
+      const dialog = document.createElement("ha-dialog");
+
+      dialog.innerHTML = `
+        <div slot="heading">Code alarme</div>
+        <div style="padding:16px 0;">
+          <ha-textfield
+            id="codeInput"
+            label="Code / PIN"
+            type="password"
+            autofocus
+          ></ha-textfield>
+        </div>
+        <mwc-button slot="primaryAction">OK</mwc-button>
+        <mwc-button slot="secondaryAction">Annuler</mwc-button>
+      `;
+
+      dialog.addEventListener("closed", () => {
+        resolve(null);
+        dialog.remove();
+      });
+
+      dialog.querySelector("[slot='secondaryAction']")
+        .addEventListener("click", () => {
+          dialog.close();
+          resolve(null);
+        });
+
+      dialog.querySelector("[slot='primaryAction']")
+        .addEventListener("click", () => {
+          const val = dialog.querySelector("#codeInput")?.value;
+          dialog.close();
+          resolve(val || null);
+        });
+
+      document.body.appendChild(dialog);
+      dialog.open();
+    });
+  }
+
+
   _render() {
     const cfg      = this._config || {};
     const shown    = cfg.sensors  || SENSORS_DEF.map(s => s.key);
@@ -393,7 +435,7 @@ const isOk = okStates.includes(normalizedState);
 
     // Boutons
 this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
-  btn.addEventListener("click", () => {
+  btn.addEventListener("click", async () => {
     const action = btn.dataset.action;
 
     const entity = this._getState(this.config.alarm_entity);
@@ -408,7 +450,7 @@ this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
 
     // ── Si code requis et absent → demande utilisateur ──
     if (codeRequired && !code) {
-      code = prompt("Code / PIN de l'alarme :");
+      code = await this._askCode();
       if (!code) return; // annulation utilisateur
     }
 
@@ -428,6 +470,7 @@ this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
   });
 });
 }
+     
   // ── Mise à jour légère (sans reconstruire le DOM) ────
   _update() {
     if (!this._hass) return;
