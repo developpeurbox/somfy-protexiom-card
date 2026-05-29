@@ -339,7 +339,8 @@ const isOk = okStates.includes(normalizedState);
     const iconAlarm = `<svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>`;
     const iconLock  = `<svg class="ei" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>`;
 
-    this.shadowRoot.innerHTML = `
+    this.shadowRoot.innerHTML =
+      `
       <style>
         :host { display: block; font-family: var(--primary-font-family, sans-serif); }
         .card {
@@ -359,7 +360,7 @@ const isOk = okStates.includes(normalizedState);
         .alarm-state-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
         .alarm-state { font-size: 13px; }
         .alarm-since { font-size: 11px; color: var(--secondary-text-color); font-style: italic; }
-        .alarm-actions { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
+        .alarm-actions { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;  pointer-events: auto; }
         .btn {
           height: 36px; width: 110px; padding: 0 10px; margin: 0;
           border-radius: 8px; border: none; box-sizing: border-box;
@@ -367,6 +368,8 @@ const isOk = okStates.includes(normalizedState);
           cursor: pointer; display: flex; align-items: center; justify-content: center;
           gap: 6px; transition: opacity 0.2s, transform 0.1s; white-space: nowrap;
           -webkit-appearance: none; appearance: none;
+          pointer-events: auto;
+          user-select: none;
         }
         .btn:hover { opacity: 0.85; transform: translateY(-1px); }
         .btn:active { transform: translateY(0); }
@@ -432,6 +435,9 @@ const isOk = okStates.includes(normalizedState);
         <div class="card-version">Somfy Protexial Card ${CARD_VERSION}</div>
       </div>
     `;
+    console.log("CARD RENDERED");
+    this.shadowRoot.querySelector(".alarm-actions")
+    ?.addEventListener("click", () => console.log("CLICK OK"));
 
 // Boutons 
 this.addEventListener("click", async (ev) => {
