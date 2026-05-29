@@ -59,7 +59,7 @@ class SomfyProtexialCardEditor extends HTMLElement {
     ];
   }
 
-_askCode() {
+  _askCode() {
     return new Promise(resolve => {
       const dialog = document.createElement("ha-dialog");
 
@@ -436,15 +436,10 @@ const isOk = okStates.includes(normalizedState);
       </div>
     `;
     console.log("CARD RENDERED");
-    this.shadowRoot.querySelector(".alarm-actions")
-    ?.addEventListener("click", () => console.log("CLICK OK"));
 
 // Boutons 
-this.addEventListener("click", async (ev) => {
-  const btn = ev.composedPath?.().find(el =>
-    el?.classList?.contains?.("btn")
-  );
-
+this.shadowRoot.addEventListener("click", async (ev) => {
+  const btn = ev.target.closest(".btn");
   if (!btn) return;
 
   const action = btn.dataset.action;
@@ -481,7 +476,7 @@ this.addEventListener("click", async (ev) => {
   } catch (e) {
     console.error("callService error:", e);
   }
-}, true);
+});
 }
      
   // ── Mise à jour légère (sans reconstruire le DOM) ────
