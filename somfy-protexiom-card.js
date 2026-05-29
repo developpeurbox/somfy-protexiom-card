@@ -252,7 +252,7 @@ class SomfyProtexialCard extends HTMLElement {
     let statusLabel, statusColor, dotColor;
     if (sensor.type === "binary") {
       const okStates = ["on", "open", "open", "detected", "non détecté", "fermées"];
-      const isOk = okStates.includes(String(state).toLowerCase());
+      const isOk = okStates.includes(String(state);
       statusLabel = isUnavail ? "Indisponible" : state;
       statusColor = isUnavail ? "var(--disabled-color)" : isOk ? "#4ade80" : "#ef4444";
       dotColor    = statusColor;
@@ -344,6 +344,9 @@ class SomfyProtexialCard extends HTMLElement {
               <button class="btn btn-arm-away" data-action="arm_away">
                 ${iconLock} Absent
               </button>
+              <button class="btn btn-arm-home" data-action="arm_home">
+               ${iconLock} Présent
+              </button>
             </div>
           </div>
         </div>
@@ -373,12 +376,15 @@ class SomfyProtexialCard extends HTMLElement {
     // Boutons
     this.shadowRoot.querySelectorAll(".btn[data-action]").forEach(btn => {
       btn.addEventListener("click", () => {
-        this._hass.callService(
-          "alarm_control_panel",
-          btn.dataset.action === "disarm" ? "alarm_disarm" : "alarm_arm_away",
-          {},
-          { entity_id: this.config.alarm_entity }
-        );
+        
+      this._hass.callService(
+      "alarm_control_panel",
+        action === "disarm" ? "alarm_disarm" :
+        action === "arm_home" ? "alarm_arm_home" : "alarm_arm_away",
+        {},
+        { entity_id: this.config.alarm_entity }
+      );
+         
       });
     });
   }
