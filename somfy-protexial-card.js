@@ -434,22 +434,18 @@ const isOk = okStates.includes(normalizedState);
     `;
 
 // Boutons 
-this.shadowRoot.addEventListener("click", async (ev) => {
-  const path = ev.composedPath ? ev.composedPath() : [];
-  const btn = path.find(el =>
+this.addEventListener("click", async (ev) => {
+  const btn = ev.composedPath?.().find(el =>
     el?.classList?.contains?.("btn")
   );
 
   if (!btn) return;
 
-  ev.preventDefault();
-  ev.stopPropagation();
-
   const action = btn.dataset.action;
   const entity = this._getState(this.config.alarm_entity);
 
   if (!this._hass) {
-    console.error("HA not ready (_hass missing)");
+    console.error("HA not ready");
     return;
   }
 
@@ -477,9 +473,9 @@ this.shadowRoot.addEventListener("click", async (ev) => {
       ...(code ? { code } : {})
     });
   } catch (e) {
-    console.error("Service call failed:", e);
+    console.error("callService error:", e);
   }
-});
+}, true);
 }
      
   // ── Mise à jour légère (sans reconstruire le DOM) ────
