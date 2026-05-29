@@ -59,48 +59,6 @@ class SomfyProtexialCardEditor extends HTMLElement {
     ];
   }
 
-  _askCode() {
-    return new Promise(resolve => {
-      const dialog = document.createElement("ha-dialog");
-
-      dialog.innerHTML = `
-        <div slot="heading">Code alarme</div>
-        <div style="padding:16px 0;">
-          <ha-textfield
-            id="codeInput"
-            label="Code / PIN"
-            type="password"
-            autofocus
-          ></ha-textfield>
-        </div>
-        <mwc-button slot="primaryAction">OK</mwc-button>
-        <mwc-button slot="secondaryAction">Annuler</mwc-button>
-      `;
-
-      dialog.addEventListener("closed", () => {
-        resolve(null);
-        dialog.remove();
-      });
-
-      dialog.querySelector("[slot='secondaryAction']")
-        .addEventListener("click", () => {
-          dialog.close();
-          resolve(null);
-        });
-
-      dialog.querySelector("[slot='primaryAction']")
-        .addEventListener("click", () => {
-          const val = dialog.querySelector("#codeInput")?.value;
-          dialog.close();
-          resolve(val || null);
-        });
-
-      document.body.appendChild(dialog);
-      dialog.open();
-    });
-  }
-
-
   _render() {
     const cfg      = this._config || {};
     const shown    = cfg.sensors  || SENSORS_DEF.map(s => s.key);
@@ -339,8 +297,7 @@ const isOk = okStates.includes(normalizedState);
     const iconAlarm = `<svg viewBox="0 0 24 24" fill="currentColor" width="26" height="26"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>`;
     const iconLock  = `<svg class="ei" viewBox="0 0 24 24" fill="currentColor"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg>`;
 
-    this.shadowRoot.innerHTML =
-      `
+    this.shadowRoot.innerHTML = `
       <style>
         :host { display: block; font-family: var(--primary-font-family, sans-serif); }
         .card {
@@ -360,7 +317,7 @@ const isOk = okStates.includes(normalizedState);
         .alarm-state-row { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
         .alarm-state { font-size: 13px; }
         .alarm-since { font-size: 11px; color: var(--secondary-text-color); font-style: italic; }
-        .alarm-actions { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0;  pointer-events: auto; }
+        .alarm-actions { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
         .btn {
           height: 36px; width: 110px; padding: 0 10px; margin: 0;
           border-radius: 8px; border: none; box-sizing: border-box;
@@ -368,8 +325,6 @@ const isOk = okStates.includes(normalizedState);
           cursor: pointer; display: flex; align-items: center; justify-content: center;
           gap: 6px; transition: opacity 0.2s, transform 0.1s; white-space: nowrap;
           -webkit-appearance: none; appearance: none;
-          pointer-events: auto;
-          user-select: none;
         }
         .btn:hover { opacity: 0.85; transform: translateY(-1px); }
         .btn:active { transform: translateY(0); }
@@ -435,47 +390,42 @@ const isOk = okStates.includes(normalizedState);
         <div class="card-version">Somfy Protexial Card ${CARD_VERSION}</div>
       </div>
     `;
-    console.log("CARD RENDERED");
 
-// Boutons 
-this.shadowRoot.addEventListener("click", async (ev) => {
-  const btn = ev.target.closest(".btn");
-  if (!btn) return;
+    // Boutons
+this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const action = btn.dataset.action;
 
-  const action = btn.dataset.action;
-  const entity = this._getState(this.config.alarm_entity);
+    const entity = this._getState(this.config.alarm_entity);
 
-  if (!this._hass) {
-    console.error("HA not ready");
-    return;
-  }
+    // ── Détection si un code est requis ──
+    const codeRequired =
+      entity?.attributes?.code_format ||
+      entity?.attributes?.code_arm_required === true;
 
-  const codeRequired =
-    entity?.attributes?.code_format ||
-    entity?.attributes?.code_arm_required === true;
+    // code éventuellement défini dans la config
+    let code = this.config.alarm_code;
 
-  let code = this.config.alarm_code;
+    // ── Si code requis et absent → demande utilisateur ──
+    if (codeRequired && !code) {
+      code = prompt("Code / PIN de l'alarme :");
+      if (!code) return; // annulation utilisateur
+    }
 
-  if (codeRequired && !code) {
-    code = await this._askCode();
-    if (!code) return;
-  }
+    const service =
+      action === "disarm"
+        ? "alarm_disarm"
+        : action === "arm_home"
+          ? "alarm_arm_home"
+          : "alarm_arm_away";
 
-  const service =
-    action === "disarm"
-      ? "alarm_disarm"
-      : action === "arm_home"
-        ? "alarm_arm_home"
-        : "alarm_arm_away";
-
-  try {
-    await this._hass.callService("alarm_control_panel", service, {
-      entity_id: this.config.alarm_entity,
-      ...(code ? { code } : {})
-    });
-  } catch (e) {
-    console.error("callService error:", e);
-  }
+    this._hass.callService(
+      "alarm_control_panel",
+      service,
+      code ? { code } : {},
+      { entity_id: this.config.alarm_entity }
+    );
+  });
 });
 }
      
