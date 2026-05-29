@@ -427,6 +427,7 @@ this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
     );
   });
 });
+}
      
   // ── Mise à jour légère (sans reconstruire le DOM) ────
   _update() {
