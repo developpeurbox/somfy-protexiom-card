@@ -6,7 +6,8 @@
 
 Carte personnalisée Home Assistant pour les centrales **Somfy Protexial / Protexiom / Protexial IO**.
 
-Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et l'état des capteurs fournis par l'intégration [somfy-protexial](https://github.com/the8tre/somfy-protexial) et son [fork](https://github.com/AuroreVgn/somfy-protexial) mis à jour avec les infos GSM .
+Elle affiche en une seule carte l'état de l'alarme, les boutons de contrôle et l'état des capteurs fournis par l'intégration [somfy-protexial](https://github.com/the8tre/somfy-protexial) et son [fork](https://github.com/AuroreVgn/somfy-protexial) mis à jour avec les infos GSM.
+Elle gère la saisie du code d'armement / désarmenent depuis un popup dans le navigateur.
 
 ![Aperçu thème sombre](doc/images/dark_example.jpg)
 
