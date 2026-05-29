@@ -252,7 +252,7 @@ class SomfyProtexialCard extends HTMLElement {
     let statusLabel, statusColor, dotColor;
     if (sensor.type === "binary") {
       const okStates = ["on", "open", "open", "detected", "non détecté", "fermées"];
-      const isOk = okStates.includes(String(state);
+      const isOk = okStates.includes(String(state));
       statusLabel = isUnavail ? "Indisponible" : state;
       statusColor = isUnavail ? "var(--disabled-color)" : isOk ? "#4ade80" : "#ef4444";
       dotColor    = statusColor;
