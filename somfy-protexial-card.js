@@ -251,7 +251,7 @@ class SomfyProtexialCard extends HTMLElement {
     const isUnavail = state === "unavailable";
     let statusLabel, statusColor, dotColor;
     if (sensor.type === "binary") {
-      
+
       const normalizedState = (state ?? "")
         .toString()
         .normalize("NFKC")
@@ -270,7 +270,7 @@ class SomfyProtexialCard extends HTMLElement {
       );
 
 const isOk = okStates.includes(normalizedState);
-      
+
       statusLabel = isUnavail ? "Indisponible" : state;
       statusColor = isUnavail ? "var(--disabled-color)" : isOk ? "#4ade80" : "#ef4444";
       dotColor    = statusColor;
@@ -392,23 +392,42 @@ const isOk = okStates.includes(normalizedState);
     `;
 
     // Boutons
+// Boutons
 this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
   btn.addEventListener("click", () => {
     const action = btn.dataset.action;
 
-    this._hass.callService(
-      "alarm_control_panel",
+    const entity = this._getState(this.config.alarm_entity);
+
+    // Détection si un code est requis par l'entité
+    const codeRequired =
+      entity?.attributes?.code_format ||
+      entity?.attributes?.code_arm_required === true;
+
+    // Code fourni dans la config (optionnel)
+    let code = this.config.alarm_code;
+
+    // Si requis et pas déjà défini → demander à l'utilisateur
+    if (codeRequired && !code) {
+      code = prompt("Code alarme requis :");
+      if (!code) return; // annulation utilisateur
+    }
+
+    const service =
       action === "disarm"
         ? "alarm_disarm"
         : action === "arm_home"
           ? "alarm_arm_home"
-          : "alarm_arm_away",
-      {},
+          : "alarm_arm_away";
+
+    this._hass.callService(
+      "alarm_control_panel",
+      service,
+      code ? { code } : {},
       { entity_id: this.config.alarm_entity }
     );
   });
 });
-  }
 
   // ── Mise à jour légère (sans reconstruire le DOM) ────
   _update() {
