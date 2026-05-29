@@ -1,19 +1,19 @@
 /* ========================================================
-   Somfy Protexial Card  
+   Somfy Protexial Card
    ======================================================== */
 
-const CARD_VERSION = "v0.0.1";
+const CARD_VERSION = "v0.0.2";
 
 const SENSORS_DEF = [
-  { key: "capteur1", defaultEntity: "binary_sensor.somfy_protexial_batterie",               defaultLabel: "Affiche Capteur 1", defaultText: "Batterie",        type: "binary" },
-  { key: "capteur2", defaultEntity: "binary_sensor.somfy_protexial_camera",                 defaultLabel: "Affiche Capteur 2", defaultText: "Caméra",          type: "info"   },
-  { key: "capteur3", defaultEntity: "binary_sensor.somfy_protexial_centrale",               defaultLabel: "Affiche Capteur 3", defaultText: "Centrale",        type: "binary" },
-  { key: "capteur4", defaultEntity: "binary_sensor.somfy_protexial_comm_centrale_capteurs", defaultLabel: "Affiche Capteur 4", defaultText: "Capteurs",        type: "binary" },
-  { key: "capteur5", defaultEntity: "binary_sensor.somfy_protexial_communication_gsm",      defaultLabel: "Affiche Capteur 5", defaultText: "Gsm",             type: "binary" },
-  { key: "capteur6", defaultEntity: "binary_sensor.somfy_protexial_mouvement",              defaultLabel: "Affiche Capteur 6", defaultText: "Mouvement",       type: "info"   },
-  { key: "capteur7", defaultEntity: "sensor.somfy_protexial_operateur_gsm",                 defaultLabel: "Affiche Capteur 7", defaultText: "Opérateur",       type: "info"   },
-  { key: "capteur8", defaultEntity: "binary_sensor.somfy_protexial_portes_ou_fenetres",     defaultLabel: "Affiche Capteur 8", defaultText: "Portes/Fenêtres", type: "info"   },
-  { key: "capteur9", defaultEntity: "sensor.somfy_protexial_signal_gsm_5",                  defaultLabel: "Affiche Capteur 9", defaultText: "Signal Gsm",      type: "info"   },
+  { key: "capteur1", defaultEntity: "binary_sensor.somfy_protexial_batterie", defaultLabel: "Affiche Capteur 1", defaultText: "Batterie", type: "binary" },
+  { key: "capteur2", defaultEntity: "binary_sensor.somfy_protexial_centrale", defaultLabel: "Affiche Capteur 3", defaultText: "Centrale", type: "binary" },
+  { key: "capteur3", defaultEntity: "binary_sensor.somfy_protexial_portes_ou_fenetres", defaultLabel: "Affiche Capteur 8", defaultText: "Portes/Fenêtres", type: "binary" },
+  { key: "capteur4", defaultEntity: "binary_sensor.somfy_protexial_mouvement", defaultLabel: "Affiche Capteur 6", defaultText: "Mouvement", type: "binary" },
+  { key: "capteur5", defaultEntity: "binary_sensor.somfy_protexial_camera", defaultLabel: "Affiche Capteur 2", defaultText: "Caméra", type: "info" },
+  { key: "capteur6", defaultEntity: "binary_sensor.somfy_protexial_comm_centrale_capteurs", defaultLabel: "Affiche Capteur 4", defaultText: "Capteurs", type: "binary" },
+  { key: "capteur7", defaultEntity: "binary_sensor.somfy_protexial_communication_gsm", defaultLabel: "Affiche Capteur 5", defaultText: "Gsm", type: "binary" },
+  { key: "capteur8", defaultEntity: "sensor.somfy_protexial_operateur_gsm", defaultLabel: "Affiche Capteur 7", defaultText: "Opérateur", type: "info" },
+  { key: "capteur9", defaultEntity: "sensor.somfy_protexial_signal_gsm_5", defaultLabel: "Affiche Capteur 9", defaultText: "Signal Gsm (/5)", type: "info" },
 ];
 
 // ── Editor ──────────────────────────────────────────────
@@ -251,7 +251,26 @@ class SomfyProtexialCard extends HTMLElement {
     const isUnavail = state === "unavailable";
     let statusLabel, statusColor, dotColor;
     if (sensor.type === "binary") {
-      const isOk  = state === "OK";
+
+      const normalizedState = (state ?? "")
+        .toString()
+        .normalize("NFKC")
+        .trim();
+
+      const okStates = [
+        "non détecté",
+        "Non détecté",
+        "fermées",
+        "Fermées",
+        "ok",
+        "OK",
+        "Ok"
+      ].map(s =>
+            s.toString().normalize("NFKC").trim()
+      );
+
+const isOk = okStates.includes(normalizedState);
+
       statusLabel = isUnavail ? "Indisponible" : state;
       statusColor = isUnavail ? "var(--disabled-color)" : isOk ? "#4ade80" : "#ef4444";
       dotColor    = statusColor;
@@ -343,6 +362,9 @@ class SomfyProtexialCard extends HTMLElement {
               <button class="btn btn-arm-away" data-action="arm_away">
                 ${iconLock} Absent
               </button>
+              <button class="btn btn-arm-home" data-action="arm_home">
+               ${iconLock} Présent
+              </button>
             </div>
           </div>
         </div>
@@ -370,18 +392,43 @@ class SomfyProtexialCard extends HTMLElement {
     `;
 
     // Boutons
-    this.shadowRoot.querySelectorAll(".btn[data-action]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        this._hass.callService(
-          "alarm_control_panel",
-          btn.dataset.action === "disarm" ? "alarm_disarm" : "alarm_arm_away",
-          {},
-          { entity_id: this.config.alarm_entity }
-        );
-      });
-    });
-  }
+this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const action = btn.dataset.action;
 
+    const entity = this._getState(this.config.alarm_entity);
+
+    // ── Détection si un code est requis ──
+    const codeRequired =
+      entity?.attributes?.code_format ||
+      entity?.attributes?.code_arm_required === true;
+
+    // code éventuellement défini dans la config
+    let code = this.config.alarm_code;
+
+    // ── Si code requis et absent → demande utilisateur ──
+    if (codeRequired && !code) {
+      code = prompt("Code / PIN de l'alarme :");
+      if (!code) return; // annulation utilisateur
+    }
+
+    const service =
+      action === "disarm"
+        ? "alarm_disarm"
+        : action === "arm_home"
+          ? "alarm_arm_home"
+          : "alarm_arm_away";
+
+    this._hass.callService(
+      "alarm_control_panel",
+      service,
+      code ? { code } : {},
+      { entity_id: this.config.alarm_entity }
+    );
+  });
+});
+}
+     
   // ── Mise à jour légère (sans reconstruire le DOM) ────
   _update() {
     if (!this._hass) return;
