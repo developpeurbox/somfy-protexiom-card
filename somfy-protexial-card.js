@@ -392,24 +392,23 @@ const isOk = okStates.includes(normalizedState);
     `;
 
     // Boutons
-// Boutons
 this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
   btn.addEventListener("click", () => {
     const action = btn.dataset.action;
 
     const entity = this._getState(this.config.alarm_entity);
 
-    // Détection si un code est requis par l'entité
+    // ── Détection si un code est requis ──
     const codeRequired =
       entity?.attributes?.code_format ||
       entity?.attributes?.code_arm_required === true;
 
-    // Code fourni dans la config (optionnel)
+    // code éventuellement défini dans la config
     let code = this.config.alarm_code;
 
-    // Si requis et pas déjà défini → demander à l'utilisateur
+    // ── Si code requis et absent → demande utilisateur ──
     if (codeRequired && !code) {
-      code = prompt("Code alarme requis :");
+      code = prompt("Code / PIN de l'alarme :");
       if (!code) return; // annulation utilisateur
     }
 
@@ -427,7 +426,8 @@ this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
       { entity_id: this.config.alarm_entity }
     );
   });
-
+});
+     
   // ── Mise à jour légère (sans reconstruire le DOM) ────
   _update() {
     if (!this._hass) return;
