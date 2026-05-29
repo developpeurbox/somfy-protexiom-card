@@ -427,7 +427,6 @@ this.shadowRoot.querySelectorAll(".btn").forEach(btn => {
       { entity_id: this.config.alarm_entity }
     );
   });
-});
 
   // ── Mise à jour légère (sans reconstruire le DOM) ────
   _update() {
